@@ -2,58 +2,96 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 
+const Header = (props) => {
+  return (
+    <h1 key={props.key}> {props.course} </h1>
+  )
+}
+
+const Content = (props) => {
+  console.log(props)
+  return (
+    <div>
+      { props.part.map((part) => <Part key={part.id} part={part.name} exercises={part.exercises} />)}
+      <Total parts={props.part}/>
+    </div> 
+  )
+}
+
+const Total = ({parts}) => {
+  const total = parts.reduce( (s, p) => s + p.exercises,0)
+  return (
+    <p><strong>Number of exercises</strong> {total}</p>
+  )
+}
+
+const Part = (props) => {
+  return (
+    <p key={props.key}>  {props.part} {props.exercises}</p>
+  )
+}
+
+const Course = ({key, course}) => {
+  console.log(course.parts)
+  return (
+    <div>
+      <Header key={key} course={course.name}/>
+      <Content part={course.parts}/>
+    </div>
+  )
+}
 
 const App = () => { 
-  const course = 'Half stack application development'
-  const part = [
+  const courses = [
     {
-      name: 'Fundamentals of React',
-      exercises: 10
-    },
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    }, 
     {
-      name: 'Using props to pass data',
-      exercises: 7
-    },
-    {
-      name: 'State of a component',
-      exercises: 14
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
     }
   ]
 
-  const Header = (props) => {
-    return (
-      <h1> {props.course} </h1>
-    )
-  }
-
-  const Content = (props) => {
-    return (
-      <div>
-        <Part part={part[0].name} exercises={part[0].exercises} />
-        <Part part={part[1].name} exercises={part[1].exercises} />
-        <Part part={part[2].name} exercises={part[2].exercises} />
-      </div> 
-    )
-  }
-
-  const Total = (props) => {
-    return (
-      <p>Number of exercises {props.exercises + props.exercises2 + props.exercises3}</p>
-    )
-  }
-
-  const Part = (props) => {
-    return (
-      <p>{props.part} {props.exercises}</p>
-    )
-  }
-
   return (
-    <div>
-      <Header course={course} />
-      <Content part={part[0].name} exercises={part[0].exercises} />
-      <Total exercises={part[0].exercises} exercises2={part[1].exercises} exercises3={part[2].exercises} />
-    </div>
+  <div>
+    { courses.map((course) => <Course key={course.id} course={course}/>) }
+  </div>
+    
   )
 }
 
