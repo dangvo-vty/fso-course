@@ -2,12 +2,21 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import axios from 'axios'
+import notesService from './services/notes' 
 import './App.css'
+import notes from './services/notes'
+
 
 const Person = (props) => {
   return (
     <div>
-      {props.persons.map(person => <div key={person.name}>{person.name} {person.number}</div>)}
+      { 
+      props.persons.map( person => 
+        <div key={person.name}>
+          {person.name} {person.number} <button onClick={() => props.onClick(person.id)}></button>
+          </div>
+        )
+      }
     </div>
   )
 }
@@ -45,11 +54,12 @@ const App = () => {
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   
+
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response =>  setPersons(response.data))
-  },[])
+    notesService.getAll().then(initialNotes => {
+      setPersons(initialNotes)
+    })
+  }, [])
 
   const handleFilterChange = (event) => {
     if (event.target.value === '') {
@@ -58,16 +68,26 @@ const App = () => {
     setSearch(event.target.value)
     setFilter(true)
     }
-    
   }
+  
 
   const addPerson = (event) => {
     event.preventDefault()
+    const isExist = persons.find(person => person.name === newName)
+    
     if (newName === '') { return alert('Name cannot be empty')}
     if (newNumber === '') { return alert('Number cannot be empty')}
     if (isNaN(newNumber)) { return alert('Number must be a number')}
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to the phonebook`)
+    if (isExist && !isNaN(newNumber)) {
+      if (window.confirm(`Hey, ${newName} is already exist. Replace the old with a new number? `)) {
+        const updated = {...isExist, number: newNumber}
+        notesService.update(isExist.id, updated).then(returnedPerson => {
+          setPersons(persons.map(p => p.id === isExist.id ? returnedPerson: p))
+        setNewName('')
+        setNewNumber('')
+        })       
+      }
+      
       return
     }
       
@@ -76,11 +96,21 @@ const App = () => {
       number: newNumber
     }
 
-    setPersons(persons.concat(personObject))
+    notesService.create(personObject)
+    .then(p => setPersons(persons.concat({...personObject,id:p.id})))
     setNewName('')
     setNewNumber('')
   }
   
+  const deletePerson = (id) => {
+     console.log(id)
+    const person = persons.find(p => p.id === id)
+    if (window.confirm (`Delete ${person.name}?`)) {
+      notesService.deletePerson(id)
+      setPersons(persons.filter(p => p.id !== id))
+      
+    }
+  }
 
   return (
     <div>
@@ -90,7 +120,7 @@ const App = () => {
       </div>
       <PersonForm newName={newName} newNumber={newNumber} onChangeName={handleNameChange} onChangeNumber={handleNumberChange} onClick={addPerson} />
       <h2>Numbers</h2>
-      <Person persons={filter ? persons.filter((p) => p.name.includes(search)) : persons }  />
+      <Person persons={filter ? persons.filter((p) => p.name.includes(search)) : persons } onClick={deletePerson} />
     </div>
   )
 }
