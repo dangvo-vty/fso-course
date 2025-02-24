@@ -6,6 +6,14 @@ import notesService from './services/notes'
 import './App.css'
 import notes from './services/notes'
 
+const Notification = ({message,className}) => {
+  if (message == '') return null
+  return (
+    <div className={className} >
+      {message}
+    </div>
+  )
+}
 
 const Person = (props) => {
   return (
@@ -13,7 +21,7 @@ const Person = (props) => {
       { 
       props.persons.map( person => 
         <div key={person.name}>
-          {person.name} {person.number} <button onClick={() => props.onClick(person.id)}></button>
+          {person.name} {person.number} <button onClick={() => props.onClick(person.id)}>Delete</button>
           </div>
         )
       }
@@ -50,6 +58,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState(false)
+  const [message, setMessage] = useState('')
+  const [className, setClassName] = useState('')
 
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
@@ -83,6 +93,8 @@ const App = () => {
         const updated = {...isExist, number: newNumber}
         notesService.update(isExist.id, updated).then(returnedPerson => {
           setPersons(persons.map(p => p.id === isExist.id ? returnedPerson: p))
+        setClassName('successful')
+        setMessage('Updated complete')
         setNewName('')
         setNewNumber('')
         })       
@@ -98,6 +110,8 @@ const App = () => {
 
     notesService.create(personObject)
     .then(p => setPersons(persons.concat({...personObject,id:p.id})))
+    setClassName('successful')
+    setMessage(`Added ${newName}`)
     setNewName('')
     setNewNumber('')
   }
@@ -106,8 +120,19 @@ const App = () => {
      console.log(id)
     const person = persons.find(p => p.id === id)
     if (window.confirm (`Delete ${person.name}?`)) {
-      notesService.deletePerson(id)
-      setPersons(persons.filter(p => p.id !== id))
+      notesService.deletePerson(id).then( returnedPerson => {
+      setPersons(persons.filter(p => p.id !== id)),
+      setClassName('successful'),
+      setMessage(`Deleted ${returnedPerson.name}`)
+    }).catch(error => {
+        setMessage(`${person.name} is already deleted`),
+        setClassName('error'),
+        setTimeout(() => {
+          setMessage(''),
+          setClassName('error')
+        },5000)
+      })
+      
       
     }
   }
@@ -115,6 +140,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} className={className}/>
       <div>
         <Filter onChange={handleFilterChange} />
       </div>
