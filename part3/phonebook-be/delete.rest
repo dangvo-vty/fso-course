@@ -1,7 +1,7 @@
-POST http://localhost:3005/api/persons/ HTTP/1.1
+PUT http://localhost:3001/api/persons/ HTTP/1.1
 content-type: application/json
 
-{
-    "name": "sample",
-    "number": "Wed, 21 Oct 2015 18:27:50 GMT"
+{   "id": "67bf24bbeccfc8770fdb54e3",
+    "name": "dang2",
+    "number": "112"
 }

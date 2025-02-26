@@ -87,7 +87,8 @@ const App = () => {
     
     if (newName === '') { return alert('Name cannot be empty')}
     if (newNumber === '') { return alert('Number cannot be empty')}
-    if (isNaN(newNumber)) { return alert('Number must be a number')}
+    // if (isNaN(newNumber)) { return alert('Number must be a number')}
+
     if (isExist && !isNaN(newNumber)) {
       if (window.confirm(`Hey, ${newName} is already exist. Replace the old with a new number? `)) {
         const updated = {...isExist, number: newNumber}
@@ -99,8 +100,7 @@ const App = () => {
         setNewNumber('')
         })       
       }
-      
-      return
+       return
     }
       
     const personObject = {
@@ -108,8 +108,20 @@ const App = () => {
       number: newNumber
     }
 
-    notesService.create(personObject)
-    .then(p => setPersons(persons.concat({...personObject,id:p.id})))
+    notesService
+    .create(personObject)
+    .then(p => {
+      setPersons(persons.concat({...personObject,id:p.id}))
+      console.log("then created",p)
+    })
+    .catch(error => {
+      setMessage(`${error.response.data.error}`),
+      setClassName('error'),
+      setTimeout(()=>{
+        setMessage(''),
+        setClassName('')
+      },10000)
+    })
     setClassName('successful')
     setMessage(`Added ${newName}`)
     setNewName('')
@@ -123,7 +135,7 @@ const App = () => {
       notesService.deletePerson(id).then( returnedPerson => {
       setPersons(persons.filter(p => p.id !== id)),
       setClassName('successful'),
-      setMessage(`Deleted ${returnedPerson.name}`)
+      setMessage(`Deleted ${  person.name}`)
     }).catch(error => {
         setMessage(`${person.name} is already deleted`),
         setClassName('error'),
@@ -131,9 +143,7 @@ const App = () => {
           setMessage(''),
           setClassName('error')
         },5000)
-      })
-      
-      
+      })  
     }
   }
 
