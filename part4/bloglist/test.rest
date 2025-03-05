@@ -1,0 +1,20 @@
+DELETE http://localhost:3003/api/blogs/67c881de95f9bae7ab66c92e
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbmcxMjMiLCJpZCI6IjY3Yzg3YWU4ZTQ2OWFhNzc3NDJiMmE2OCIsImlhdCI6MTc0MTE5MzY3MH0.dnFdS0z6-qOmL5MS6fmZpDQPal3-HSL2-v64U4wspxY
+#     "username": "dang123",
+#     "name": "dang vo",
+#     "password": "025117461aA"
+# }
+
+# {
+#     "title": "test2",
+#     "author": "testtt",
+#     "url": "testttt",
+#     "likes": 100,
+#     "userID": "67c87ae8e469aa77742b2a68"
+# }
+
+# {
+#     "username": "dang123",
+#     "password": "025117461aA"
+# }
