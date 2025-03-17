@@ -1,0 +1,46 @@
+.error 
+  {
+   
+      color: red;
+      background: lightgrey;
+      font-size: 20px;
+      border-style: solid;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    
+  }
+
+.successful 
+{
+  color: green;
+      background: lightgrey;
+      font-size: 20px;
+      border-style: solid;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+}
+
+.blog-box 
+{
+  color: black;
+      background: lightgrey;
+      font-size: 20px;
+      border-style: solid;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+}
+
+.remove-button {
+  background-color:  salmon;
+}
+
+.view-button {
+  background-color:  grey;
+}
+
+.like-button {
+  background-color:  greenyellow;
+}
