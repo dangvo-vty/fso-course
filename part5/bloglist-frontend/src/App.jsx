@@ -40,6 +40,8 @@ const App = () => {
       setMessage('Loggin')
       setClass('successful')
     } catch (exception) {
+      setMessage('wrong user')
+      setClass('error')
       console.log('sai pass')
     }
   }
