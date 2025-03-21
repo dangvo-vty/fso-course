@@ -13,6 +13,8 @@ const store = configureStore({
   notification: notificationReducer}
 })
 
+
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />

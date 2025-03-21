@@ -12,7 +12,7 @@ const Notification = () => {
 
   return (
     <div style={style}>
-      {message} has added
+      {message}
     </div>
   )
 }
